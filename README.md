@@ -124,28 +124,4 @@ Troubleshooting
   ```
   to refresh and force-download dependencies.
 
-Project file highlights
-- Controller: `src/main/java/com/discretebody/urlshortner/controller/ShortUrlController.java`
-  - POST /create — create short URL
-  - GET /{shortCode} — redirect to original URL
-- Service: `src/main/java/com/discretebody/urlshortner/services/ShortUrlService.java`
-  - Main logic for generating short codes and saving `ShortUrl` entities
-- Entity: `src/main/java/com/discretebody/urlshortner/entity/ShortUrl.java`
-- Repository: `src/main/java/com/discretebody/urlshortner/repository/ShortUrlRepository.java`
-- DTOs: `src/main/java/com/discretebody/urlshortner/dto/UrlShortRequestDto.java` and `UrlShortResponseDto.java`
-- Utilities: `src/main/java/com/discretebody/urlshortner/util/ShortCodeGenerator.java`
-- Exceptions & global handler: `src/main/java/com/discretebody/urlshortner/exception/*`
 
-Next steps and enhancements
-- Support plain text `text/plain` POST bodies for convenience (currently expects JSON DTO).
-- De-duplicate URLs: return existing short URL when the same original URL already exists.
-- Analytics: track click counts, referrers, timestamps.
-- Rate-limiting & Abuse protection.
-- Add integration tests for end-to-end behavior (create + redirect).
-- Add Dockerfile + docker-compose for local DB and app setup.
-
-License & contribution
-- Add a LICENSE file if you plan to open-source this repo.
-- Add a CONTRIBUTING.md with instructions for tests and code style if you expect external contributions.
-
-If you'd like, I can also add a Postman collection, create a simple script that runs a few curl tests, or implement one of the next-step features — tell me which and I'll add it.
