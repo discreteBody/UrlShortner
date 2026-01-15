@@ -108,20 +108,4 @@ HTTP/1.1 302 Found
 Location: https://example.com/very/long/path
 ```
 
-Running tests
-```bash
-./mvnw test
-```
-
-Troubleshooting
-- If you see validation errors resolved by compilation but runtime validation exceptions occur, ensure `spring-boot-starter-validation` is present (it is in the provided `pom.xml`).
-- If the app doesn't start:
-  - Check logs printed to console when running `spring-boot:run`.
-  - Ensure database config is correct. For quick local testing, configure an in-memory DB (H2) or ensure Postgres is running with the configured URL.
-- If dependencies look missing, run:
-  ```bash
-  ./mvnw -U clean package
-  ```
-  to refresh and force-download dependencies.
-
 
