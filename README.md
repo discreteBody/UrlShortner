@@ -215,7 +215,7 @@ The application uses a **Cache-Aside** pattern with Redis:
 - Uses `SecureRandom` for cryptographically strong random codes
 - Character set: `a-z`, `A-Z`, `0-9` (62 characters)
 - Length: 6 characters
-- Total possible combinations: 62^6 = 56.8 billion unique codes
+- Total possible combinations: 62^6 = approximately 56.8 billion unique codes
 - Collision detection: Regenerates if code already exists
 
 ## 📁 Project Structure
