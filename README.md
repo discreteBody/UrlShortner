@@ -16,7 +16,7 @@ A high-performance Spring Boot service that creates short URLs and redirects the
 ## 🛠️ Tech Stack
 
 - **Java 21** - Modern Java with latest features
-- **Spring Boot 3.4.x** - Application framework
+- **Spring Boot 4.0.1** - Application framework
 - **Spring Data JPA** - Database persistence layer
 - **PostgreSQL** - Primary data store
 - **Spring Data Redis** - High-performance caching layer
