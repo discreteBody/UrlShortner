@@ -1,8 +1,7 @@
-Here is the updated README.md. I have integrated the Redis instructions, the Sliding Expiration logic we discussed, and the necessary Docker commands to get Redis running.
 
-You can copy and paste this directly into your repository.
 
-UrlShortner
+**UrlShortner**
+
 A high-performance Spring Boot service that creates short URLs and redirects short codes to the original URLs.
 
 New Features:
