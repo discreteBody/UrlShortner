@@ -1,111 +1,67 @@
-# UrlShortner
+Here is the updated README.md. I have integrated the Redis instructions, the Sliding Expiration logic we discussed, and the necessary Docker commands to get Redis running.
 
-A lightweight Spring Boot service that creates short URLs and redirects short codes to the original URLs.
+You can copy and paste this directly into your repository.
 
-This repository contains:
-- A REST endpoint to create short URLs from original URLs
-- A redirect endpoint to map short codes back to original URLs
-- JPA entity and repository for storage
-- Basic validation for incoming requests
-- Example DTOs and a small service layer
+UrlShortner
+A high-performance Spring Boot service that creates short URLs and redirects short codes to the original URLs.
 
-Tech stack
-- Java 21
-- Spring Boot 4.x
-- Spring Data JPA
-- ModelMapper
-- Lombok
+New Features:
 
-Quick start (development)
-1. Clone the repo:
-   ```bash
-   git clone <your-repo-url>
-   ```
-2. From project root run with the included Maven wrapper:
-   - On PowerShell / Windows:
-     ```powershell
-     cd D:\SpringBoot\Projects\UrlShortner
-     .\mvnw.cmd spring-boot:run
-     ```
-   - On bash / macOS / Linux:
-     ```bash
-     ./mvnw spring-boot:run
-     ```
-3. Application will start on port 8080 by default.
+Redis Caching: Implements the Cache-Aside pattern for sub-millisecond response times.
 
-Build a production jar
-```bash
-./mvnw -DskipTests package
-```
-Resulting artifact: `target/UrlShortner-0.0.1-SNAPSHOT.jar`
+Sliding Expiration: Frequently accessed URLs automatically refresh their Time-To-Live (TTL) in the cache, keeping popular links hot in memory.
+
+Tech Stack
+Java 21
+
+Spring Boot 4.x
+
+Spring Data JPA (PostgreSQL)
+
+Spring Data Redis (Caching)
+
+ModelMapper
+
+Lombok
+
+Docker (For local Redis instance)
+
+Quick Start (Development)
+1. Prerequisites (Database & Cache)
+Before running the app, ensure PostgreSQL and Redis are running.
+
+Start Redis using Docker:
+
+Bash
+
+docker run --name redis -p 6379:6379 -d redis
+Start PostgreSQL (if using Docker):
+
+Bash
+
+docker run --name postgres -e POSTGRES_PASSWORD=yourpassword -p 5432:5432 -d postgres
+2. Clone and Run
+Clone the repo:
+
+Bash
+
+git clone <your-repo-url>
+From project root, run with the included Maven wrapper:
+
+PowerShell / Windows:
+
+PowerShell
+
+.\mvnw.cmd spring-boot:run
+Bash / macOS / Linux:
+
+Bash
+
+./mvnw spring-boot:run
+Application will start on port 8080 by default.
 
 Configuration
-- The service reads configuration from `src/main/resources/application.properties` (or environment).
-- Important property:
-  - `app.base-url` — base URL used when building returned short URLs (example: `http://short.url/`)
+The service reads configuration from src/main/resources/application.properties.
 
-Example `application.properties` snippet:
-```
-# Base URL used in generated shortUrl responses
-app.base-url=http://short.url/
-# JPA/Hibernate example (use your DB)
-spring.datasource.url=jdbc:postgresql://localhost:5432/urlshortner
-spring.datasource.username=youruser
-spring.datasource.password=yourpassword
-spring.jpa.hibernate.ddl-auto=update
-```
-
-API
-
-1) Create a short URL
-- Method: POST
-- Path: `/create`
-- Content-Type: `application/json`
-- Request body (JSON):
-  ```json
-  { "originalUrl": "https://example.com/very/long/path" }
-  ```
-- Example (curl):
-  ```bash
-  curl -X POST http://localhost:8080/create \
-    -H "Content-Type: application/json" \
-    -d '{"originalUrl":"https://example.com/very/long/path"}'
-  ```
-- Example (PowerShell):
-  ```powershell
-  Invoke-RestMethod -Method Post -Uri http://localhost:8080/create -ContentType 'application/json' -Body '{"originalUrl":"https://example.com/very/long/path"}'
-  ```
-- Successful response: HTTP 200 OK + JSON matching `UrlShortResponseDto`:
-  ```json
-  {
-    "shortUrl": "http://short.url/abc123",
-    "originalUrl": "https://example.com/very/long/path",
-    "creationDate": "2026-01-16T12:34:56.789",
-    "expirationDate": "2026-02-15T12:34:56.789"
-  }
-  ```
-
-Validation & error cases for POST `/create`
-- `originalUrl` is required and must not be blank (validation -> 400 Bad Request).
-- `originalUrl` maximum length: 2048 characters (validation -> 400).
-- If you send `text/plain` instead of JSON, the controller expects JSON DTO. If you want to support raw text, see the “Next steps” section.
-
-2) Redirect to original URL
-- Method: GET
-- Path: `/{shortCode}`
-- Example: If the service returned `http://short.url/abc123`, call `GET http://localhost:8080/abc123`.
-- Behavior:
-  - If the short code exists and is not expired: returns HTTP 302 Found with `Location` header set to the original URL.
-  - If not found or expired: returns HTTP 404 (handled via `ResourceNotFoundException` and global exception handler).
-
-Manual test of redirect using curl (show headers):
-```bash
-curl -i -X GET http://localhost:8080/abc123
-```
-Expected response headers:
-```
-HTTP/1.1 302 Found
-Location: https://example.com/very/long/path
-```
 
 
