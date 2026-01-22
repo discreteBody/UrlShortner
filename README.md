@@ -1,98 +1,33 @@
-# URL Shortener
+# 🔗 URL Shortener: High-Performance Redirect Service
 
-A high-performance Spring Boot service that creates short URLs and redirects them to the original URLs. Built with enterprise-grade caching and optimized for low-latency redirects.
 
-## ✨ Features
-
-- **URL Shortening**: Convert long URLs into compact 6-character short codes
-- **Fast Redirects**: HTTP 302 redirects from short URLs to original URLs
-- **Redis Caching**: Implements the Cache-Aside pattern for sub-millisecond response times
-- **Sliding Expiration**: Frequently accessed URLs automatically refresh their Time-To-Live (TTL) in the cache, keeping popular links hot in memory
-- **Negative Caching**: Protects the database from repeated lookups of non-existent short codes
-- **URL Validation**: Validates URL format and optionally pings the destination
-- **Graceful Fallback**: Continues working even if Redis is unavailable
-- **30-Day Expiration**: Short URLs automatically expire after 30 days
-
+A high-concurrency Spring Boot service optimized for low-latency URL redirection using enterprise-grade caching strategies.
 ## 🛠️ Tech Stack
 
-- **Java 21** - Modern Java with latest features
-- **Spring Boot 4.0.1** - Application framework
-- **Spring Data JPA** - Database persistence layer
-- **PostgreSQL** - Primary data store
-- **Spring Data Redis** - High-performance caching layer
-- **ModelMapper** - Object mapping
-- **Lombok** - Reduces boilerplate code
-- **Jakarta Validation** - Request validation
-- **Maven** - Build and dependency management
+🛠️ Tech Stack
+Backend: Java 21, Spring Boot 4.0.1, Spring Data JPA
+
+Database: PostgreSQL (Primary Store)
+
+Caching: Redis (High-speed lookups)
+
+Tools: Maven, Docker, Lombok, ModelMapper
+
+## ⚡ Key Technical Features
+
+1. Advanced Caching StrategyImplements a Cache-Aside pattern to minimize database hits:Performance: Sub-millisecond redirects for cached URLs.Sliding Expiration: Cache TTL (1 hour) automatically resets on every hit, keeping popular links in memory.Negative Caching: Non-existent keys are cached for 1 minute to prevent Cache Penetration attacks on the database.Resilience: Graceful fallback to PostgreSQL if Redis is unavailable.
+2. Optimized Short-Code GenerationUses SecureRandom for cryptographically strong 6-character alphanumeric codes.Supports 56.8 Billion unique combinations ($62^6$).Includes built-in collision detection and automatic regeneration logic.
+3. Clean ArchitectureValidation: Jakarta Validation for URL format and accessibility pings.Data Flow: Strict separation between Entities and DTOs using ModelMapper.Error Handling: Global Exception Handler for consistent REST API responses.
 
 ## 📋 Prerequisites
 
 Before running the application, ensure you have the following installed and running:
 
-### Required
-- Java 21 or higher
-- PostgreSQL database
-- Redis server (optional but recommended for optimal performance)
 
-### Database Setup
 
-**Option 1: Docker (Recommended)**
+### API Reference
 
-```bash
-# Start PostgreSQL
-docker run --name postgres \
-  -e POSTGRES_DB=urlshortnerdb \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -p 5432:5432 \
-  -d postgres
-
-# Start Redis
-docker run --name redis \
-  -p 6379:6379 \
-  -d redis
-```
-
-**Option 2: Local Installation**
-
-Install PostgreSQL and Redis locally, then create a database named `urlshortnerdb`.
-
-## 🚀 Quick Start
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/discreteBody/UrlShortner.git
-cd UrlShortner
-```
-
-### 2. Configure Database Connection
-
-Edit `src/main/resources/application.properties` if your database credentials differ:
-
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/urlshortnerdb
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-```
-
-### 3. Run the Application
-
-**Windows (PowerShell):**
-```powershell
-.\mvnw.cmd spring-boot:run
-```
-
-**Linux/macOS:**
-```bash
-./mvnw spring-boot:run
-```
-
-The application will start on **http://localhost:9030**
-
-## 📡 API Endpoints
-
-### Create Short URL
+## Create Short URL
 
 Generates a short URL for a given original URL.
 
@@ -167,28 +102,6 @@ GET http://localhost:9030/
 ]
 ```
 
-## ⚙️ Configuration
-
-The application is configured via `src/main/resources/application.properties`:
-
-```properties
-# Application
-spring.application.name=UrlShortner
-server.port=9030
-app.base-url=http://localhost:9030/
-
-# Database
-spring.datasource.url=jdbc:postgresql://localhost:5432/urlshortnerdb
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-
-# Redis Cache
-spring.data.redis.host=localhost
-spring.data.redis.port=6379
-spring.data.redis.timeout=2000
-```
 
 ### Configuration Options
 
@@ -218,79 +131,6 @@ The application uses a **Cache-Aside** pattern with Redis:
 - Total possible combinations: 62^6 = approximately 56.8 billion unique codes
 - Collision detection: Regenerates if code already exists
 
-## 📁 Project Structure
-
-```
-src/main/java/com/discretebody/urlshortner/
-├── config/              # Application configuration
-│   ├── ModelMapperConfig.java
-│   └── RedisConfig.java
-├── controller/          # REST API controllers
-│   └── ShortUrlController.java
-├── dto/                 # Data Transfer Objects
-│   ├── UrlShortRequestDto.java
-│   └── UrlShortResponseDto.java
-├── entity/              # JPA entities
-│   └── ShortUrl.java
-├── exception/           # Exception handling
-│   ├── ApiError.java
-│   ├── BadRequestException.java
-│   ├── GlobalExceptionHandler.java
-│   └── ResourceNotFoundException.java
-├── repository/          # Data access layer
-│   └── ShortUrlRepository.java
-├── services/            # Business logic
-│   └── ShortUrlService.java
-└── util/                # Utility classes
-    ├── PingService.java
-    ├── ShortCodeGenerator.java
-    └── UrlValidator.java
-```
-
-## 🧪 Testing
-
-Run tests with Maven:
-
-```bash
-./mvnw test
-```
-
-## 🔨 Building
-
-Build the application:
-
-```bash
-./mvnw clean package
-```
-
-The executable JAR will be created in `target/UrlShortner-0.0.1-SNAPSHOT.jar`
-
-Run the JAR:
-
-```bash
-java -jar target/UrlShortner-0.0.1-SNAPSHOT.jar
-```
-
-## 🐛 Troubleshooting
-
-### PostgreSQL Connection Issues
-
-- Ensure PostgreSQL is running: `docker ps` or check your local service
-- Verify database exists: `psql -U postgres -c "\l"`
-- Check credentials in `application.properties`
-
-### Redis Connection Issues
-
-- The application will work without Redis but with reduced performance
-- Check Redis is running: `docker ps` or `redis-cli ping`
-- Logs will show: "Redis unavailable, falling back to Postgres"
-
-### Port Already in Use
-
-Change the port in `application.properties`:
-```properties
-server.port=8080
-```
 
 ## 🚧 Roadmap
 
@@ -298,20 +138,7 @@ Future enhancements planned:
 
 - [ ] Spring Security integration for API authentication
 - [ ] Web UI (React/Thymeleaf) for URL management
-- [ ] Custom short codes (user-defined aliases)
 - [ ] Click analytics and tracking
 - [ ] QR code generation for short URLs
-- [ ] Bulk URL shortening
 - [ ] API rate limiting
 
-## 📝 License
-
-This project is available for use under standard open source terms.
-
-## 👤 Author
-
-**discreteBody**
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
