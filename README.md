@@ -1,3 +1,6 @@
+## High Level Design
+<img width="1609" height="1258" alt="diagram-export-2-20-2026-3_12_06-PM" src="https://github.com/user-attachments/assets/877fd778-2b1e-4cfa-8961-b5d42b5974d9" />
+
 # 🔗 URL Shortener: High-Performance Redirect Service
 
 
