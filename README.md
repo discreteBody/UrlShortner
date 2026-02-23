@@ -1,8 +1,8 @@
-## High Level Design
-<img width="1609" height="1258" alt="diagram-export-2-20-2026-3_12_06-PM" src="https://github.com/user-attachments/assets/877fd778-2b1e-4cfa-8961-b5d42b5974d9" />
 
 # 🔗 URL Shortener: High-Performance Redirect Service
 
+## High Level Design
+<img width="1609" height="1258" alt="diagram-export-2-20-2026-3_12_06-PM" src="https://github.com/user-attachments/assets/877fd778-2b1e-4cfa-8961-b5d42b5974d9" />
 
 A high-concurrency Spring Boot service optimized for low-latency URL redirection using enterprise-grade caching strategies.
 ## 🛠️ Tech Stack
@@ -135,13 +135,4 @@ The application uses a **Cache-Aside** pattern with Redis:
 - Collision detection: Regenerates if code already exists
 
 
-## 🚧 Roadmap
-
-Future enhancements planned:
-
-- [ ] Spring Security integration for API authentication
-- [ ] Web UI (React/Thymeleaf) for URL management
-- [ ] Click analytics and tracking
-- [ ] QR code generation for short URLs
-- [ ] API rate limiting
 
